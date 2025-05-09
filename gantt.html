@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+<head>
+    <meta charset="UTF-8">
+    <title>Gráfico de Gantt</title>
+    <script> src="https://cdn.jsdelivr.net/npm/chart.js"</script>
+</head>
+<body>
+    <canvas id="GanttChart"></canvas>
+    <script>
+        // Função para obter parâmetros da URL
+        function getParameterByName(name){
+            const URL= new URL(window.location.href);
+            return url.searchParams.get(name);
+        }
+        const dadosParam = getParameterByName ('dados');
+        const tarefas = JSON.parse(decodeURIComponent(dadosParam));
+        const labels = tarefas.map(t => t.expertise);
+        const dataset = [
+            {
+                label: 'Periodo Atuacao',
+                data: tarefas.map(t => t.endWeek - t.startWeek),
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                base: tarefas.map(t=>t.startWeek)
+            }
+        ];
+        const config = {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: datasets,
+            },
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x{
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Semanas'
+                        }
+                    },
+                    y: {
+                        title {
+                            display: true,
+                            text: 'Expertise'
+                        }
+                    }
+                }
+            }
+        };
+        const ctx = document.getElementByID('GanttChart').getContext('2d');
+        new Chart(ctz, config);
+    </script>
+</body>
+<html>
